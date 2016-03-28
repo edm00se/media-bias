@@ -1,0 +1,5 @@
+Django
+twitter
+jsonfield
+psycopg2
+gunicorn

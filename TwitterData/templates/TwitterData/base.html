@@ -1,0 +1,42 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Political Bias</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static 'css/TwitterData.css' %}">
+    <link href='http://fonts.googleapis.com/css?family=Josefin+Sans&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="row">
+          <h1>Political Discussion on Twitter</h1>
+        </div>
+        <div class="row">
+          <div class="col-md-4"><a href = ""> About the Project </a></div>
+          <div class="col-md-4"><a href = ""> Analysis </a></div>
+          <div class="col-md-4"><a href = "/"> Home </a></div>
+        </div>
+      </div>
+    </header>
+  	<div class="container">
+  		{% block content %}
+    	{% endblock %}
+    </div>
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4"><a href = "https://github.com/aspittel/MediaBias"> Source Code </a></div>
+          <div class="col-md-4">A Hamilton College Government Department Senior Project</div>
+          <div class="col-md-4">by Ali Spittel</div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

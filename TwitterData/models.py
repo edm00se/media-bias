@@ -4,6 +4,7 @@ from django.utils import timezone
 from datetime import datetime
 from jsonfield import JSONField
 from time import sleep
+from textblob import TextBlob
 import json
 import twitter
 
@@ -71,14 +72,20 @@ class Tweet(models.Model):
     tweet_id = models.BigIntegerField(null=True, blank=True)
     user = models.TextField(null=True, blank=True)
     user_followers = models.IntegerField(null=True, blank=True)
+    verified = models.BooleanField(blank=True, default=True)
     text = models.TextField(null=True, blank=True)
     tweeted_at = models.TextField(null=True, blank=True)
     retweets = models.IntegerField(null=True, blank=True)
     favorites = models.IntegerField(null=True, blank=True)
     hashtags = models.TextField(null=True, blank=True)
+    polarity = models.FloatField(null=True, blank=True)
+    subjectivity = models.FloatField(null=True, blank=True)
 
 
 def search_twitter():
+    """
+    Calls twitter api and creates database entries with the results of those searches.
+    """
     while True:
         try:
             senators = Senator.objects.all()
@@ -98,13 +105,17 @@ def search_twitter():
                         print term
                         for tweet in tweets:
                             if not Tweet.objects.filter(tweet_id=int(tweet.id)).exists():
+                                sentiment = TextBlob(tweet.text).sentiment
                                 tweet = Tweet(search=search, tweet_id=int(tweet.id),
                                               user=tweet.user.screen_name,
                                               user_followers=int(tweet.user.followers_count),
                                               text=tweet.text, tweeted_at=tweet.created_at,
                                               retweets=int(tweet.retweet_count),
                                               favorites=int(tweet.favorite_count),
-                                              hashtags=[hashtag.text for hashtag in tweet.hashtags])
+                                              hashtags=[hashtag.text for hashtag in tweet.hashtags],
+                                              verified=tweet.user.verified,
+                                              subjectivity=sentiment.subjectivity,
+                                              polarity=sentiment.polarity)
                                 tweet.save()
                         sleep(30)
                     except:

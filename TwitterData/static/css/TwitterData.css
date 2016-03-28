@@ -1,0 +1,27 @@
+h1, h2, h3, h4 {
+    text-align: center;
+}
+
+footer {
+    font-family: 'Josefin Sans', sans-serif;
+    text-align: center;
+}
+
+header {
+    background-color: #CAEBF2;
+    text-align: center;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+header a {
+    color = #696969;
+    font-size: 20px;
+}
+
+body {
+    /*background-color: #EFEFEF;*/
+}
+
+footer a {
+    color: #FF3B3F;
+}
