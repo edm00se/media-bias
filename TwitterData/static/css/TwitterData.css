@@ -20,6 +20,11 @@ header a {
 
 body {
     /*background-color: #EFEFEF;*/
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+body h4{
+    color: #FF3B3F;
 }
 
 footer a {

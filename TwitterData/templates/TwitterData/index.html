@@ -1,4 +1,25 @@
 {% extends 'TwitterData/base.html' %}
 
 {% block content %}
+  <div class="container">
+    <label for="select_senator"><h4> Get Summary Data for a Senator: </h4></label>
+    <div class="input-group">
+      <select id="select_senator" class="form-control">
+        {% for senator in senators %}
+            <option value="{{ senator.pk }}"> {{ senator.name }} </option>
+        {% endfor %}
+      </select>
+      <span class="input-group-btn">
+        <a class="btn btn-default" role="button" id = "senator_select_button" href = "/">Go</a>
+      </span>
+    </div>
+  </div>
+  <script>
+  $('#select_senator').change(function(){
+      console.log(this.value)
+      $("#senator_select_button").attr("href", "senator/" + this.value)
+    }
+  )
+  </script>
+
 {% endblock %}
