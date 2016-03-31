@@ -63,7 +63,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'MediaBias.urls'
+ROOT_URLCONF = 'media-bias.urls'
 
 TEMPLATES = [
     {
@@ -81,7 +81,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'MediaBias.wsgi.application'
+WSGI_APPLICATION = 'media-bias.wsgi.application'
 
 
 # Database
