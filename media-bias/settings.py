@@ -90,10 +90,10 @@ WSGI_APPLICATION = 'media-bias.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'twitterdata',
-        'USER': 'aspittel',
-        'PASSWORD':'Sp.51141',
-        'HOST': 'localhost',
+        'NAME': 'dbulreljqqhnje',
+        'USER': 'rynmozeuwmefdi',
+        'PASSWORD':'KgTd-gCW9-fyPpoLGkjLqV6LBj',
+        'HOST': 'ec2-54-225-112-119.compute-1.amazonaws.com',
         'PORT':'5432',
     }
 }
