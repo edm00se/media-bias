@@ -1,3 +1,1 @@
-web:python manage.py runserver
-web: gunicorn media-bias.wsgi
-heroku ps:scale web=1
+web: gunicorn media-bias.wsgi:application --log-file -
