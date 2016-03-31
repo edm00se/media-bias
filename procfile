@@ -1,1 +1,1 @@
-web: gunicorn MediaBias.wsgi --log-file -
+web: gunicorn MediaBias.wsgi
