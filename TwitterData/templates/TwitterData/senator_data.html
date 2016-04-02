@@ -11,9 +11,10 @@
     <div class="row"><b>Average Tweet Polarity: </b> {{ avg_polarity }}</div>
     <div class="row"><a href = "{{ twitter_url }}">{{ senator.name }}'s Twitter </a></div>
   </div>
+  <div id = "chartContainer"></div>
   <div class="container">
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-6">
         <h3>Most Used Words</h3>
         <table class = "table table-striped">
           <thead>
@@ -24,6 +25,25 @@
           </thead>
           <tbody>
             {% for word, count in most_used_words.items %}
+            <tr>
+              <td>{{ count }}</td>
+              <td>{{ word }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6">
+        <h3>Most Used Hashtags</h3>
+        <table class = "table table-striped">
+          <thead>
+            <tr>
+              <th>Count</th>
+              <th>Word</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for word, count in most_used_hashtags.items %}
             <tr>
               <td>{{ count }}</td>
               <td>{{ word }}</td>

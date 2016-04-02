@@ -90,10 +90,10 @@ WSGI_APPLICATION = 'media-bias.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dbulreljqqhnje',
-        'USER': 'rynmozeuwmefdi',
-        'PASSWORD':'KgTd-gCW9-fyPpoLGkjLqV6LBj',
-        'HOST': 'ec2-54-225-112-119.compute-1.amazonaws.com',
+        'NAME': 'dbvq1hv2i4u093',
+        'USER': 'rskmkcdvusbwgv',
+        'PASSWORD':'OPnf92BLOWitj9qgfHj_XcT0zF',
+        'HOST': 'ec2-54-235-93-178.compute-1.amazonaws.com',
         'PORT':'5432',
     }
 }

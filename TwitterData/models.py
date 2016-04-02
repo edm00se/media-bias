@@ -6,7 +6,7 @@ from jsonfield import JSONField
 from time import sleep
 from textblob import TextBlob
 import json
-import twitter
+# import twitter
 
 
 class Senator(models.Model):
@@ -87,39 +87,36 @@ def search_twitter():
     Calls twitter api and creates database entries with the results of those searches.
     """
     while True:
-        try:
-            senators = Senator.objects.all()
+        # try:
+        senators = Senator.objects.all()
 
-            api = twitter.Api(consumer_key='WcqDv7hfaVTaPcKirWnkKCdoj',
-                              consumer_secret='dI6QKXlFXQ3qjSIHle3kfFAAsktCsCthXBJa8mtsDsvNH8bQUg',
-                              access_token_key='3092104835-CU1ALu2qBDZ8aRBm7mTqlyRXHPxNtnh8j7UMr7p',
-                              access_token_secret='i2Nu4HQmQ0399dH9MpkHQNPjSyWMJY0PikHd0ORWhBHt5') # Oauth information
+        api = twitter.Api(consumer_key='WcqDv7hfaVTaPcKirWnkKCdoj',consumer_secret='dI6QKXlFXQ3qjSIHle3kfFAAsktCsCthXBJa8mtsDsvNH8bQUg',access_token_key='3092104835-CU1ALu2qBDZ8aRBm7mTqlyRXHPxNtnh8j7UMr7p', access_token_secret='i2Nu4HQmQ0399dH9MpkHQNPjSyWMJY0PikHd0ORWhBHt5') # Oauth information
 
-            for senator in senators:
-                terms = json.loads(senator.search_terms)
-                for term in terms:
-                    try:
-                        tweets = api.GetSearch(term=term, count=100, result_type='recent') # Search twitter for that search term
-                        search = Search(senator=senator, search_term=term)
-                        search.save()
-                        print term
-                        for tweet in tweets:
-                            if not Tweet.objects.filter(tweet_id=int(tweet.id)).exists():
-                                sentiment = TextBlob(tweet.text).sentiment
-                                tweet = Tweet(search=search, tweet_id=int(tweet.id),
-                                              user=tweet.user.screen_name,
-                                              user_followers=int(tweet.user.followers_count),
-                                              text=tweet.text, tweeted_at=tweet.created_at,
-                                              retweets=int(tweet.retweet_count),
-                                              favorites=int(tweet.favorite_count),
-                                              hashtags=[hashtag.text for hashtag in tweet.hashtags],
-                                              verified=tweet.user.verified,
-                                              subjectivity=sentiment.subjectivity,
-                                              polarity=sentiment.polarity)
-                                tweet.save()
-                        sleep(30)
-                    except:
-                        print "Waiting for API to refresh"
-                        sleep(900)
-        except:
-            sleep(60)
+        for senator in senators:
+            terms = json.loads(senator.search_terms)
+            for term in terms:
+                try:
+                    tweets = api.GetSearch(term=term, count=100, result_type='recent') # Search twitter for that search term
+                    search = Search(senator=senator, search_term=term)
+                    search.save()
+                    print term
+                    for tweet in tweets:
+                        if not Tweet.objects.filter(tweet_id=int(tweet.id)).exists():
+                            sentiment = TextBlob(tweet.text).sentiment
+                            tweet = Tweet(search=search, tweet_id=int(tweet.id),
+                                          user=tweet.user.screen_name,
+                                          user_followers=int(tweet.user.followers_count),
+                                          text=tweet.text, tweeted_at=tweet.created_at,
+                                          retweets=int(tweet.retweet_count),
+                                          favorites=int(tweet.favorite_count),
+                                          hashtags=[hashtag.text for hashtag in tweet.hashtags],
+                                          verified=tweet.user.verified,
+                                          subjectivity=sentiment.subjectivity,
+                                          polarity=sentiment.polarity)
+                            tweet.save()
+                    sleep(30)
+                except:
+                    print "Waiting for API to refresh"
+                    sleep(1200)
+        # except:
+        #     sleep(60)
