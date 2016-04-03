@@ -134,5 +134,16 @@
   </div>
 </div>
 <script>
+$(document).ready(function(){
+  $('.difference').each(function(){
+    console.log($(this).text())
+      if ($(this).text() > .05){
+        $(this).css('color', '#FF3B3F');
+      }
+      else{
+        $(this).css('color', '#3399ff');
+      }
+    })
+  })
 </script>
 {% endblock %}
