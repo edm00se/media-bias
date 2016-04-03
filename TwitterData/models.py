@@ -6,7 +6,7 @@ from jsonfield import JSONField
 from time import sleep
 from textblob import TextBlob
 import json
-# import twitter
+import twitter
 
 
 class Senator(models.Model):

@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from collections import Counter, OrderedDict
 from .models import *
+from scipy.stats import chisquare
 import ast
 import string
 
@@ -44,6 +45,51 @@ def count_hashtags_used(tweets):
     hashtag_count = OrderedDict(sorted(hashtag_count.items(), key=lambda x: (-x[1], x[0])))
 
     return hashtag_count
+
+
+def search_for_word(request, word):
+    """"""
+    tweets = Tweet.objects.filter(text__icontains = word)
+    tweet_count = tweets.count()
+
+    female_republican_tweets = tweets.filter(search__senator__gender = "Female", search__senator__party = "Republican").count()
+    male_republican_tweets = tweets.filter(search__senator__gender = "Male", search__senator__party = "Republican").count()
+    female_democrat_tweets = tweets.filter(search__senator__party = "Democratic", search__senator__gender = "Female").count()
+    male_democrat_tweets = tweets.filter(search__senator__party = "Democratic", search__senator__gender = "Male").count()
+
+    female_tweets = female_republican_tweets + female_democrat_tweets
+    male_tweets = male_democrat_tweets + male_republican_tweets
+    republican_tweets = female_republican_tweets + male_republican_tweets
+    democratic_tweets = female_democrat_tweets + male_democrat_tweets
+
+    senators_mentioned = tweets.order_by().values_list('search__senator__name', flat = True).distinct()
+    tweets_with_polarity = tweets.exclude(polarity__isnull=True)
+    avg_polarity = [tweet.polarity for tweet in tweets_with_polarity]
+
+    if len(avg_polarity) > 0:
+        avg_polarity = round(sum(avg_polarity)/len(avg_polarity), 4)
+    else:
+        avg_polarity = 0
+
+    stat_difference_gender = chisquare([male_tweets, female_tweets], f_exp = [(tweet_count * 77/100), (tweet_count * 20/100)])
+    stat_difference_party = chisquare([republican_tweets, democratic_tweets], f_exp = [(tweet_count * 52/100), (tweet_count * 45/100)])
+
+    stat_difference_republicans = chisquare([female_republican_tweets, male_republican_tweets], f_exp = [(tweet_count * 6/100), (tweet_count * 46/100)])
+    stat_difference_democrats = chisquare([female_democrat_tweets, male_democrat_tweets], f_exp = [(tweet_count * 14/100), (tweet_count * 30/100)])
+
+    stat_difference_women = chisquare([female_republican_tweets, female_democrat_tweets], f_exp = [(tweet_count * 6/100), (tweet_count * 13/100)])
+    stat_difference_men = chisquare([male_republican_tweets, male_democrat_tweets], f_exp = [(tweet_count * 46/100), (tweet_count * 30/100)])
+
+    stat_difference_party_gender = chisquare([female_republican_tweets, female_democrat_tweets, male_democrat_tweets, male_republican_tweets], f_exp = [(tweet_count * 6/100), (tweet_count * 14/100), (tweet_count  * 46/100), (tweet_count * 30/100)])
+
+    return render(request, 'TwitterData/search.html', {'word':word, 'tweet_count':tweet_count,
+     'polarity':avg_polarity, 'senators_mentioned':senators_mentioned, 'stat_difference_party':round(stat_difference_party[1], 4),
+     'stat_difference_gender':round(stat_difference_gender[1], 4), 'female_tweets':female_tweets, 'male_tweets':male_tweets,
+     'republican_tweets': republican_tweets, 'democratic_tweets': democratic_tweets,
+     'female_republican_tweets': female_republican_tweets, 'male_republican_tweets': male_republican_tweets,
+     'female_democrat_tweets': female_democrat_tweets, 'male_democrat_tweets': male_democrat_tweets,
+     'stat_difference_democrats':round(stat_difference_democrats[1],4), 'stat_difference_republicans':round(stat_difference_republicans[1],4),
+     'stat_difference_men':round(stat_difference_men[1],4), 'stat_difference_women':round(stat_difference_women[1],4), 'stat_difference_party_gender':round(stat_difference_party_gender[1],4)})
 
 
 def senator_data(request, pk):

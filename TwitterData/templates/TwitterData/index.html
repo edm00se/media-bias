@@ -13,11 +13,21 @@
         <a class="btn btn-default" role="button" id = "senator_select_button" href = "/senator/1/">Go</a>
       </span>
     </div>
+    <label for="search"><h4> Get Summary Data for a Word: </h4></label>
+    <div class="input-group">
+      <input id="search" class="form-control"></input>
+      <span class="input-group-btn">
+        <a class="btn btn-default" role="button" id = "senator_search_button">Go</a>
+      </span>
+    </div>
   </div>
   <script>
   $('#select_senator').change(function(){
-      console.log(this.value)
       $("#senator_select_button").attr("href", "senator/" + this.value)
+    }
+  )
+  $('#senator_search_button').click(function(){
+      window.location = "/search/" + $('#search').val()
     }
   )
   </script>
