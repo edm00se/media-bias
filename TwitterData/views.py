@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404
+from django.db.models import Avg, Count
 from django.http import HttpResponse
 from collections import Counter, OrderedDict
 from .models import *
@@ -24,7 +25,12 @@ def index(request):
 
 
 def count_words_used(tweets):
-    """"""
+    """
+    Args:
+        tweets: a queryset of tweets that the user wishes to find the counts of words used
+    Returns:
+        tweet_word_count: an ordered dictionary of the times a word is used in the list of tweets
+    """
     tweets_list = []
     for tweet in tweets:
         tweet = "".join(char for char in tweet.text if char not in CHARS_TO_EXCLUDE)
@@ -37,7 +43,12 @@ def count_words_used(tweets):
 
 
 def count_hashtags_used(tweets):
-    """"""
+    """
+    Args:
+        tweets: a queryset of tweets which the user wishes to see the count of hashtags
+    Returns:
+        hashtag_count: an ordered dictionary of the hashtags used in the tweets
+    """
     hashtag_list = []
     for tweet in tweets:
         hashtag_list.extend(ast.literal_eval(tweet.hashtags))
@@ -48,7 +59,15 @@ def count_hashtags_used(tweets):
 
 
 def search_for_word(request, word):
-    """"""
+    """
+    Args:
+        request: https request
+        word: a search term
+    Returns:
+        request: https request
+        'TwitterData/search.html': the html view to render
+        JSON object of variables to render in the view
+    """
     tweets = Tweet.objects.filter(text__icontains = word)
     tweet_count = tweets.count()
 
@@ -93,7 +112,15 @@ def search_for_word(request, word):
 
 
 def senator_data(request, pk):
-    """"""
+    """
+    Args:
+        request: https request
+        pk: primary key (id) of the senator of interest
+    Returns:
+        request: https request
+        'TwitterData/senator_data.html': the html view to render
+        JSON object of variables to render in the view
+    """
     senator_data = Senator.objects.get(pk=pk)
     search_terms = json.loads(senator_data.search_terms)
     twitter_url = "https://twitter.com/" + search_terms[-1]
@@ -129,4 +156,14 @@ def senator_data(request, pk):
     most_used_hashtags = count_hashtags_used(tweets)
     most_used_hashtags = OrderedDict(list(most_used_hashtags.items())[:100])
 
-    return render(request, 'TwitterData/senator_data.html', {'senator':senator_data, 'twitter_url':twitter_url, 'tweets':tweets, 'tweet_count':tweet_count, 'avg_polarity':avg_polarity, 'most_used_words':most_used_words, 'most_used_hashtags':most_used_hashtags})
+    return render(request, 'TwitterData/senator_data.html', {'senator':senator_data, 'twitter_url':twitter_url,
+     'tweets':tweets, 'tweet_count':tweet_count, 'avg_polarity':avg_polarity, 'most_used_words':most_used_words,
+     'most_used_hashtags':most_used_hashtags})
+
+
+def overall_summary(request):
+    tweet_count = Tweet.objects.all().count()
+    avg_polarity = round(Tweet.objects.all().aggregate(Avg('polarity'))["polarity__avg"],4)
+    senators = Senator.objects.annotate(avg_polarity = Avg('search__tweet__polarity')).annotate(num_tweets = Count('search__tweet')).order_by('-num_tweets')
+
+    return render(request, 'TwitterData/overall_summary.html', {'tweet_count': tweet_count, 'avg_polarity':avg_polarity, 'senators':senators})
