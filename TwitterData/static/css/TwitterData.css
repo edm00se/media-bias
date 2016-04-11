@@ -23,7 +23,12 @@ body {
     font-family: 'Josefin Sans', sans-serif;
 }
 
-body h4{
+#chartContainer {
+    margin:-100;
+    padding:0;
+}
+
+body h4 {
     color: #FF3B3F;
 }
 

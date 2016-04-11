@@ -51,6 +51,7 @@ def count_hashtags_used(tweets):
     """
     hashtag_list = []
     for tweet in tweets:
+        # ast.literal_eval() is correction for improper database save
         hashtag_list.extend(ast.literal_eval(tweet.hashtags))
     hashtag_count = Counter(hashtag_list)
     hashtag_count = OrderedDict(sorted(hashtag_count.items(), key=lambda x: (-x[1], x[0])))
@@ -82,6 +83,10 @@ def search_for_word(request, word):
     democratic_tweets = female_democrat_tweets + male_democrat_tweets
 
     senators_mentioned = tweets.order_by().values_list('search__senator__name', flat = True).distinct()
+
+    senators_mentioned_count = Counter(tweets.order_by().values_list('search__senator__name', flat = True))
+    senators_mentioned_count = OrderedDict(sorted(senators_mentioned_count.iteritems(), key=lambda x:-x[1])[:20])
+
     tweets_with_polarity = tweets.exclude(polarity__isnull=True)
     avg_polarity = [tweet.polarity for tweet in tweets_with_polarity]
 
@@ -102,6 +107,7 @@ def search_for_word(request, word):
     stat_difference_party_gender = chisquare([female_republican_tweets, female_democrat_tweets, male_democrat_tweets, male_republican_tweets], f_exp = [(tweet_count * 6/100), (tweet_count * 14/100), (tweet_count  * 46/100), (tweet_count * 30/100)])
 
     return render(request, 'TwitterData/search.html', {'word':word, 'tweet_count':tweet_count,
+     'count_by_senator':json.dumps(senators_mentioned_count),
      'polarity':avg_polarity, 'senators_mentioned':senators_mentioned, 'stat_difference_party':round(stat_difference_party[1], 4),
      'stat_difference_gender':round(stat_difference_gender[1], 4), 'female_tweets':female_tweets, 'male_tweets':male_tweets,
      'republican_tweets': republican_tweets, 'democratic_tweets': democratic_tweets,

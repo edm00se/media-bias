@@ -2,83 +2,126 @@
 
 {% block content %}
 <h2>{{word}}</h2>
-<div class="container">
-  <div class="row"><b>Tweet Count: </b>{{ tweet_count }}</div>
-  <div class="row"><b>Avg Polarity: </b>{{ polarity }}</div>
-  <div class="row"><b>Senators Mentioned: </b> {% for senator in senators_mentioned %} {{ senator }}, {% endfor %}</div>
-  <h3>Differences in Use</h3>
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#home">Data</a></li>
+  <li><a data-toggle="tab" href="#menu1">Methodology</a></li>
+</ul>
+
+<div class="tab-content">
+  <div id="home" class="tab-pane fade in active">
+  <br>
   <div class="container">
-    <div class="row">
-      <div class="col-md-6">
+    <div class="row"><b>Tweet Count: </b>{{ tweet_count }}</div>
+    <div class="row"><b>Avg Polarity: </b>{{ polarity }}</div>
+    <div id="chartContainer"></div>
+    <h3>Differences in Use</h3>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <table class = "table table-striped">
+            <thead>
+              <tr>
+                <th>Men</th>
+                <th>Women</th>
+                <th>Difference</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ male_tweets }}</td>
+                <td>{{ female_tweets }}</td>
+                <td class = "difference">{{ stat_difference_gender }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <table class = "table table-striped">
+            <thead>
+              <tr>
+                <th>Republicans</th>
+                <th>Democrats</th>
+                <th>Difference</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ republican_tweets }}</td>
+                <td>{{ democratic_tweets }}</td>
+                <td class = "difference">{{ stat_difference_party }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <table class = "table table-striped">
+            <thead>
+              <tr>
+                <th>Republican Women</th>
+                <th>Democratic Women</th>
+                <th>Difference</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ female_republican_tweets }}</td>
+                <td>{{ female_democrat_tweets }}</td>
+                <td class = "difference">{{ stat_difference_women }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-md-6">
+          <table class = "table table-striped">
+            <thead>
+              <tr>
+                <th>Republican Men</th>
+                <th>Democratic Men</th>
+                <th>Difference</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ male_republican_tweets }}</td>
+                <td>{{ male_democrat_tweets }}</td>
+                <td class = "difference">{{ stat_difference_men }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <table class = "table table-striped">
+            <thead>
+              <tr>
+                <th>Republican Men</th>
+                <th>Republican Women</th>
+                <th>Difference</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ male_republican_tweets }}</td>
+                <td>{{ female_republican_tweets }}</td>
+                <td class = "difference">{{ stat_difference_republicans }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <table class = "table table-striped">
+            <thead>
+              <tr>
+                <th>Democratic Men</th>
+                <th>Democratic Women</th>
+                <th>Difference</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ male_democrat_tweets }}</td>
+                <td>{{ female_democrat_tweets }}</td>
+                <td class = "difference">{{ stat_difference_democrats }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <table class = "table table-striped">
           <thead>
             <tr>
-              <th>Men</th>
-              <th>Women</th>
-              <th>Difference</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{{ male_tweets }}</td>
-              <td>{{ female_tweets }}</td>
-              <td class = "difference">{{ stat_difference_gender }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <table class = "table table-striped">
-          <thead>
-            <tr>
-              <th>Republicans</th>
-              <th>Democrats</th>
-              <th>Difference</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{{ republican_tweets }}</td>
-              <td>{{ democratic_tweets }}</td>
-              <td class = "difference">{{ stat_difference_party }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <table class = "table table-striped">
-          <thead>
-            <tr>
-              <th>Republican Women</th>
-              <th>Democratic Women</th>
-              <th>Difference</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{{ female_republican_tweets }}</td>
-              <td>{{ female_democrat_tweets }}</td>
-              <td class = "difference">{{ stat_difference_women }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="col-md-6">
-        <table class = "table table-striped">
-          <thead>
-            <tr>
-              <th>Republican Men</th>
               <th>Democratic Men</th>
-              <th>Difference</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{{ male_republican_tweets }}</td>
-              <td>{{ male_democrat_tweets }}</td>
-              <td class = "difference">{{ stat_difference_men }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <table class = "table table-striped">
-          <thead>
-            <tr>
+              <th>Democratic Women</th>
               <th>Republican Men</th>
               <th>Republican Women</th>
               <th>Difference</th>
@@ -86,64 +129,72 @@
           </thead>
           <tbody>
             <tr>
-              <td>{{ male_republican_tweets }}</td>
-              <td>{{ female_republican_tweets }}</td>
-              <td class = "difference">{{ stat_difference_republicans }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <table class = "table table-striped">
-          <thead>
-            <tr>
-              <th>Democratic Men</th>
-              <th>Democratic Women</th>
-              <th>Difference</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
               <td>{{ male_democrat_tweets }}</td>
               <td>{{ female_democrat_tweets }}</td>
-              <td class = "difference">{{ stat_difference_democrats }}</td>
+              <td>{{ male_republican_tweets }}</td>
+              <td>{{ female_republican_tweets }}</td>
+              <td class = "difference">{{ stat_difference_party_gender }}</td>
             </tr>
           </tbody>
         </table>
-      </div>
-      <table class = "table table-striped">
-        <thead>
-          <tr>
-            <th>Democratic Men</th>
-            <th>Democratic Women</th>
-            <th>Republican Men</th>
-            <th>Republican Women</th>
-            <th>Difference</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ male_democrat_tweets }}</td>
-            <td>{{ female_democrat_tweets }}</td>
-            <td>{{ male_republican_tweets }}</td>
-            <td>{{ female_republican_tweets }}</td>
-            <td class = "difference">{{ stat_difference_party_gender }}</td>
-          </tr>
-        </tbody>
-      </table>
+        </div>
       </div>
     </div>
   </div>
+  <div id="menu1" class="tab-pane fade">
+    <h3>Under Construction</h3>
+  </div>
 </div>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
 $(document).ready(function(){
+
+  // Change the colors of the Chi-Squared tests
   $('.difference').each(function(){
-    console.log($(this).text())
       if ($(this).text() > .05){
         $(this).css('color', '#FF3B3F');
       }
       else{
         $(this).css('color', '#428bca');
       }
-    })
+    });
+
+    // Render the chart
+    // Similar to example found here: https://google-developers.appspot.com/chart/interactive/docs/gallery/columnchart
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+      var count_by_senator = {{ count_by_senator | safe }}
+      var data = [["Senator", "Count"]];
+
+      for (var senator in count_by_senator){
+        data.push([senator, count_by_senator[senator]])
+      };
+
+      var data = google.visualization.arrayToDataTable(data);
+      var view = new google.visualization.DataView(data);
+
+      var options = {
+        title: "Mentions Per Senator",
+        width: '100%',
+        height: 800,
+        bar: {groupWidth: "95%"},
+        legend: { position: "none" },
+        fontName: 'Josefin Sans',
+        titleTextStyle:{
+          color: "black",
+          fontSize: 22,
+        },
+        colors:['#FF3B3F'],
+        chartArea: {'width': '80%', 'height': '80%'},
+
+      };
+
+      var chart = new google.visualization.BarChart(document.getElementById("chartContainer"));
+      chart.draw(view, options);
+    }
   })
+
 </script>
 {% endblock %}
