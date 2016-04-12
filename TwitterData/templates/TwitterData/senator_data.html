@@ -2,56 +2,80 @@
 
 {% block content %}
   <div class="container">
-    <div class="row"><h3> Senator {{ senator.name }} </h3></div>
-    <div class="row"><b>Gender:</b> {{ senator.gender }} </div>
-    <div class="row"><b>Party:</b> {{ senator.party }} </div>
-    <div class="row"><b>Search Terms:</b> {{ senator.search_terms }}</div>
-    <div class="row"><b>Next Election Year:</b> {{ senator.election_year }}</div>
-    <div class="row"><b>Tweet Count: </b> {{ tweet_count }}</div>
-    <div class="row"><b>Average Tweet Polarity: </b> {{ avg_polarity }}</div>
-    <div class="row"><a href = "{{ twitter_url }}">{{ senator.name }}'s Twitter </a></div>
-  </div>
-  <div id = "chartContainer"></div>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6">
-        <h3>Most Used Words</h3>
-        <table class = "table table-striped">
-          <thead>
-            <tr>
-              <th>Count</th>
-              <th>Word</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for word, count in most_used_words.items %}
-            <tr>
-              <td>{{ count }}</td>
-              <td>{{ word }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-      <div class="col-md-6">
-        <h3>Most Used Hashtags</h3>
-        <table class = "table table-striped">
-          <thead>
-            <tr>
-              <th>Count</th>
-              <th>Word</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for word, count in most_used_hashtags.items %}
-            <tr>
-              <td>{{ count }}</td>
-              <td>{{ word }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+    <div class="row"><h1> Senator {{ senator.name }} </h1></div>
+    <ul class="nav nav-tabs">
+      <li class="active"><a data-toggle="tab" href="#home">Data</a></li>
+      <li><a data-toggle="tab" href="#menu1">Methodology</a></li>
+    </ul>
+    <div class="tab-content">
+      <div id="home" class="tab-pane fade in active">
+      <br>
+      <div class="row"><b>Gender:</b> {{ senator.gender }} </div>
+      <div class="row"><b>Party:</b> {{ senator.party }} </div>
+      <div class="row"><b>Search Terms:</b> {{ senator.search_terms }}</div>
+      <div class="row"><b>Next Election Year:</b> {{ senator.election_year }}</div>
+      <div class="row"><b>Tweet Count: </b> {{ tweet_count }}</div>
+      <div class="row"><b>Average Tweet Polarity: </b> {{ avg_polarity }}</div>
+      <div class="row"><a href = "{{ twitter_url }}">{{ senator.name }}'s Twitter </a></div>
+      <div id = "chartContainer"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h3>Most Used Words</h3>
+            <table class = "table table-striped">
+              <thead>
+                <tr>
+                  <th>Count</th>
+                  <th>Word</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for word, count in most_used_words.items %}
+                <tr>
+                  <td>{{ count }}</td>
+                  <td>{{ word }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <div class="col-md-6">
+            <h3>Most Used Hashtags</h3>
+            <table class = "table table-striped">
+              <thead>
+                <tr>
+                  <th>Count</th>
+                  <th>Word</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for word, count in most_used_hashtags.items %}
+                <tr>
+                  <td>{{ count }}</td>
+                  <td>{{ word }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
+    <div id="menu1" class="tab-pane fade">
+      <h2>Senator Information</h2>
+      <p>
+        At the top of the page, there is biographical information and summary statistics about the Senator of interest. The search terms are used to programmatically search Twitter for Tweets about that Senator. The Tweet Count is how many Tweets that Senator has been mentioned in within the Political Discussion database.
+      </p>
+      <p>
+        The Average Polarity is a Bayesian classification of sentiment created by <a href = "http://textblob.readthedocs.org/en/dev/api_reference.html#textblob.blob.TextBlob.sentiment ">TextBlob</a>. This figure measures how positive or negative on average the Tweets about that Senator are on a scale from -1 to 1. Those with negative polarity scores are more negative.
+      </p>
+      <h2>Most Used Words and Hashtags</h2>
+      <p>
+        Below the Senator's basic information, there are two tables that list the words and hashtags that are most commonly included in Tweets about the Senator. Common words such as 'the' or 'she' are filtered from the lists.
+      </p>
+      <br>
+      <br>
+    </div>
   </div>
+</div>
 {% endblock %}

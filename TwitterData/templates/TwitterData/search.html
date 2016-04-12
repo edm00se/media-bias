@@ -13,8 +13,10 @@
   <div class="container">
     <div class="row"><b>Tweet Count: </b>{{ tweet_count }}</div>
     <div class="row"><b>Avg Polarity: </b>{{ polarity }}</div>
+    <div class="row"><b>Tweets by Verified Users: </b> {{tweets_by_verified_users}}</div>
+    <div class="row"><b>Senators Mentioned by Verified Users: </b> {% for senator in senators_mentioned_by_verified_users %}{{ senator }}, {% endfor %} </div>
     <div id="chartContainer"></div>
-    <h3>Differences in Use</h3>
+    <h3>Differences in Discussion</h3>
     <div class="container">
       <div class="row">
         <div class="col-md-6">
@@ -137,12 +139,40 @@
             </tr>
           </tbody>
         </table>
+        <br>
         </div>
       </div>
     </div>
   </div>
   <div id="menu1" class="tab-pane fade">
-    <h3>Under Construction</h3>
+    <h1>Summary Statistics</h1>
+    <p>
+      The search function finds the occurrences of a word in all of the Tweets gathered by the application. It displays summary information about the usage of the word both overall and by demographic group of senators.
+    </p>
+    <h3>Tweet Count</h3>
+    <p>
+      The Tweet Count is the number of tweets about all Senators combined that contain that term.
+    </p>
+    <h3>Average Polarity</h3>
+    <p>
+      The Average Polarity is a Bayesian classification of sentiment created by <a href = "http://textblob.readthedocs.org/en/dev/api_reference.html#textblob.blob.TextBlob.sentiment ">TextBlob</a>. This figure measures how positive or negative on average the Tweets containing the specified word are on a scale from -1 to 1. Those with negative polarity scores are more negative.
+    </p>
+    <h3>Tweets by Verified Users</h3>
+    <p>
+      This figure is the same as the original "Tweet Count" measure; however, it only includes Tweets from verified users. The breakdown is important because these users are other politicians, celebrities with large audiences, or members of the media.
+    </p>
+    <h3>Senators Mentioned by Verified Users</h3>
+    <p>
+      This lists the Senators that the verified users are Tweeting about with the search term.
+    </p>
+    <h1>Graph</h1>
+    <p>
+      The Mentions per Senator graph shows how many times the twenty Senators mentioned most with the search term are discussed.
+    </p>
+    <h1>Differences in Discussion</h1>
+    <p>
+      These figures show how many times Senators in the listed groups are discussed with the search term and if there is a statistically significant different number of Tweets for the group of Senators. The statistical difference is computed using a Pearson's Chi-Squared test that is adjusted for the group size -- the formula takes into account that there are just 20 women in the Senate to compare to the 77 male Senators studied in this project. If the difference has a p-value below 0.05 there is a statistically significant difference between the way the groups are discussed. The p-values change color in relation to statistical significance -- red ones are insignificant whereas blue ones are significant.
+    </p>
   </div>
 </div>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -179,7 +209,7 @@ $(document).ready(function(){
         title: "Mentions Per Senator",
         width: '100%',
         height: 800,
-        bar: {groupWidth: "95%"},
+        bar: { groupWidth: "95%" },
         legend: { position: "none" },
         fontName: 'Josefin Sans',
         titleTextStyle:{
@@ -188,7 +218,6 @@ $(document).ready(function(){
         },
         colors:['#FF3B3F'],
         chartArea: {'width': '80%', 'height': '80%'},
-
       };
 
       var chart = new google.visualization.BarChart(document.getElementById("chartContainer"));

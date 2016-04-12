@@ -71,7 +71,8 @@ def search_for_word(request, word):
     """
     tweets = Tweet.objects.filter(text__icontains = word)
     tweet_count = tweets.count()
-
+    tweets_by_verified_users = tweets.filter(verified = True).count()
+    senators_mentioned_by_verified_users = tweets.filter(verified=True).order_by().values_list('search__senator__name', flat = True).distinct()
     female_republican_tweets = tweets.filter(search__senator__gender = "Female", search__senator__party = "Republican").count()
     male_republican_tweets = tweets.filter(search__senator__gender = "Male", search__senator__party = "Republican").count()
     female_democrat_tweets = tweets.filter(search__senator__party = "Democratic", search__senator__gender = "Female").count()
@@ -108,6 +109,8 @@ def search_for_word(request, word):
 
     return render(request, 'TwitterData/search.html', {'word':word, 'tweet_count':tweet_count,
      'count_by_senator':json.dumps(senators_mentioned_count),
+     'tweets_by_verified_users': tweets_by_verified_users,
+     'senators_mentioned_by_verified_users': senators_mentioned_by_verified_users,
      'polarity':avg_polarity, 'senators_mentioned':senators_mentioned, 'stat_difference_party':round(stat_difference_party[1], 4),
      'stat_difference_gender':round(stat_difference_gender[1], 4), 'female_tweets':female_tweets, 'male_tweets':male_tweets,
      'republican_tweets': republican_tweets, 'democratic_tweets': democratic_tweets,

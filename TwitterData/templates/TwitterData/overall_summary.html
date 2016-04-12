@@ -1,34 +1,55 @@
 {% extends 'TwitterData/base.html' %}
 
 {% block content %}
-  <div class="container">
-    <div class="row"><b>Tweet Count: </b> {{ tweet_count }}</div>
-    <div class="row"><b>Avg Polarity: </b> {{ avg_polarity }}</div>
-  </div>
-  <div id = "chartContainer"></div>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6">
-        <h3>Senators</h3>
-        <table class = "table table-striped">
-          <thead>
-            <tr>
-              <th>Senator</th>
-              <th>Tweets About</th>
-              <th>Avg Polarity</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for senator in senators %}
-            <tr>
-              <td>{{ senator.name }}</td>
-              <td>{{ senator.num_tweets}}</td>
-              <td>{{ senator.avg_polarity }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+  <h1>Overall Data</h1>
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#home">Data</a></li>
+    <li><a data-toggle="tab" href="#menu1">Methodology</a></li>
+  </ul>
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+    <br>
+    <br>
+    <div class="container">
+      <div class="row"><b>Tweet Count: </b> {{ tweet_count }}</div>
+      <div class="row"><b>Avg Polarity: </b> {{ avg_polarity }}</div>
+    </div>
+    <h2>Senators</h2>
+    <div id = "chartContainer"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <table class = "table table-striped">
+            <thead>
+              <tr>
+                <th>Senator</th>
+                <th>Tweet Count</th>
+                <th>Avg Polarity</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for senator in senators %}
+              <tr>
+                <td>{{ senator.name }}</td>
+                <td>{{ senator.num_tweets}}</td>
+                <td>{{ senator.avg_polarity}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
+  <div id="menu1" class="tab-pane fade">
+    <h1>Tweet Count</h1>
+    <p>
+      The tweet count for each senator shows how many total tweets there are about that senator in the database. Each Senator is included other than Marco Rubio, Bernie Sanders, and Ted Cruz who were running for president at the beginning of this project which made them statistical outliers. The tweet count at the top shows how many total tweets the database contains. It is nearly constantly expanding as senators are discussed. The senators are listed from most mentioned to least mentioned on this page.
+    </p>
+    <h1>Polarity</h1>
+    <p>
+      The average polarity is a Bayesian classification of sentiment created by <a href = "http://textblob.readthedocs.org/en/dev/api_reference.html#textblob.blob.TextBlob.sentiment ">TextBlob</a>. This figure measures how positive or negative on average the Tweets about the senator are on a scale from -1 to 1. Those with negative polarity scores have more negative Tweets about them.
+    </p>
+  </div>
+</div>
 {% endblock %}
