@@ -1,55 +1,198 @@
 {% extends 'TwitterData/base.html' %}
 
 {% block content %}
-  <h1>Overall Data</h1>
-  <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" href="#home">Data</a></li>
-    <li><a data-toggle="tab" href="#menu1">Methodology</a></li>
-  </ul>
-  <div class="tab-content">
-    <div id="home" class="tab-pane fade in active">
-    <br>
-    <br>
-    <div class="container">
-      <div class="row"><b>Tweet Count: </b> {{ tweet_count }}</div>
-      <div class="row"><b>Avg Polarity: </b> {{ avg_polarity }}</div>
+
+<div class="container">
+  <div class="row" id="ring_charts">
+    <div class="col-md-4">
+      <h2> Gender </h2>
+      <div id="chart-ring-gender"></div>
     </div>
-    <h2>Senators</h2>
-    <div id = "chartContainer"></div>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <table class = "table table-striped">
-            <thead>
-              <tr>
-                <th>Senator</th>
-                <th>Tweet Count</th>
-                <th>Avg Polarity</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for senator in senators %}
-              <tr>
-                <td>{{ senator.name }}</td>
-                <td>{{ senator.num_tweets}}</td>
-                <td>{{ senator.avg_polarity}}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
+    <div class="col-md-4">
+      <h2> Party </h2>
+      <div id="chart-ring-party"></div>
+    </div>
+    <div class="col-md-4">
+      <h2> Reelection Year </h2>
+      <div id="chart-ring-electionyear"></div>
     </div>
   </div>
-  <div id="menu1" class="tab-pane fade">
-    <h1>Tweet Count</h1>
-    <p>
-      The tweet count for each senator shows how many total tweets there are about that senator in the database. Each Senator is included other than Marco Rubio, Bernie Sanders, and Ted Cruz who were running for president at the beginning of this project which made them statistical outliers. The tweet count at the top shows how many total tweets the database contains. It is nearly constantly expanding as senators are discussed. The senators are listed from most mentioned to least mentioned on this page.
-    </p>
-    <h1>Polarity</h1>
-    <p>
-      The average polarity is a Bayesian classification of sentiment created by <a href = "http://textblob.readthedocs.org/en/dev/api_reference.html#textblob.blob.TextBlob.sentiment ">TextBlob</a>. This figure measures how positive or negative on average the Tweets about the senator are on a scale from -1 to 1. Those with negative polarity scores have more negative Tweets about them.
-    </p>
+
+  <div class="row">
+    <div class="col-md-3">
+      <h3> Senators Displayed </h3>
+      <div id="senators-displayed" class="text"></div>
+    </div>
+    <div class="col-md-3">
+      <h3>Total Tweets</h3>
+      <div id="tweets-displayed"></div>
+    </div>
+    <div class="col-md-3">
+      <h3>Average Tweets</h3>
+      <div id="average-tweets-display"></div>
+    </div>
+    <div class="col-md-3">
+      <h3>Average Polarity</h3>
+      <div id="average-polarity-display"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <h2> Tweet Count </h2>
+    <div id="chart-bar-tweetcount"></div>
   </div>
 </div>
+<div class="container">
+  <div class="row">
+  <h1>Selected Senators</h1>
+  </div>
+  <div class="row">
+    <table class = "table table-striped" id="dc-data-table">
+    	<thead>
+      	<tr class="header">
+      		<th>State</th>
+          <th>Senator</th>
+          <th>Party</th>
+          <th>Polarity</th>
+          <th>Tweet Count</th>
+          <th>Reelection Year</th>
+      	</tr>
+      </thead>
+    </table>
+  </div>
+</div>
+
+<script>
+
+	var data = {{ senator_data | safe }}
+
+var senators = {{ senator_list | safe }}
+
+var ndx = crossfilter(data);
+  // var all = ndx.group()
+
+var genderRingChart   = dc.pieChart("#chart-ring-gender");
+var genderDim  = ndx.dimension(function(d) {return d.gender;});
+var gender_total = genderDim.group();
+
+var partyRingChart = dc.pieChart("#chart-ring-party")
+var partyDim  = ndx.dimension(function(d) {return d.party;});
+var party_total = partyDim.group();
+
+var electionyearRingChart = dc.pieChart("#chart-ring-electionyear")
+var electionyearDim  = ndx.dimension(function(d) {return d.election_year;});
+var electionyear_total = electionyearDim.group();
+
+var tweetCountBarChart = dc.barChart("#chart-bar-tweetcount");
+var tweetDim = ndx.dimension(function(d) {return d.name;});
+var tweet_total = tweetDim.group().reduceSum(function(d) {return d.num_tweets});
+
+var countSenatorsDisplay = dc.numberDisplay("#senators-displayed")
+var sumTweetsDisplay = dc.numberDisplay("#tweets-displayed")
+var averageTweetsDisplay =  dc.numberDisplay("#average-tweets-display")
+var averagePolarityDisplay =  dc.numberDisplay("#average-polarity-display")
+
+var number_total = ndx.groupAll().reduceCount(function(d) {return d.num_tweets});
+var number_tweets_total = ndx.groupAll().reduceSum(function(d) {return d.num_tweets})
+
+
+var averages = ndx.groupAll().reduce(
+    function(p, v){
+        p.count++;
+        p.sum += v.num_tweets;
+        p.polarity += (v.avg_polarity * 100);
+        p.avg = d3.round((p.sum / p.count), 2);
+        p.polarity_avg = d3.round((p.polarity / p.count), 2);
+        return p;
+    },
+    function(p, v){
+        p.count--;
+        p.sum -= v.num_tweets;
+        p.polarity -= (v.avg_polarity * 100);
+        p.avg = d3.round((p.sum / p.count), 2);
+        p.polarity_avg = d3.round((p.polarity / p.count), 2);
+        return p;
+    },
+    function(){
+        return{
+            count: 0,
+            avg: 0,
+            sum: 0,
+            polarity: 0,
+            polarity_avg: 0,
+        }
+    }
+)
+
+averageTweetsDisplay
+    .group(averages)
+    .valueAccessor(function(d) {return d.avg;})
+
+sumTweetsDisplay
+    .group(number_tweets_total)
+    .valueAccessor(function(d) {return d;})
+
+countSenatorsDisplay
+    .group(number_total)
+    .valueAccessor(function(d) {return d;})
+
+averagePolarityDisplay
+    .group(averages)
+    .valueAccessor(function(d) {return d.polarity_avg;})
+
+genderRingChart
+    .width(200).height(200)
+    .colors(['#FF717E', '#80D0E8'])
+    .dimension(genderDim)
+    .group(gender_total)
+    .innerRadius(30)
+
+partyRingChart
+    .width(200).height(200)
+    .colors(['#80D0E8', '#D3D3D3', '#FF717E'])
+    .dimension(partyDim)
+    .group(party_total)
+    .innerRadius(30);
+
+electionyearRingChart
+    .width(200).height(200)
+    .colors(['#FF717E', '#D3D3D3', '#80D0E8'])
+    .dimension(electionyearDim)
+    .group(electionyear_total)
+    .innerRadius(30);
+
+ tweetCountBarChart
+    .width(window.innerWidth * .9)
+    .height(480)
+    .colors(['#FF717E', '#D3D3D3', '#5bc0de'])
+    .dimension(tweetDim)
+    .group(tweet_total)
+    .x(d3.scale.ordinal().domain(senators))
+    .xUnits(dc.units.ordinal)
+    .elasticY(true)
+    .yAxisLabel("")
+    .xAxisLabel("Senator (Hover for Name)")
+
+tweetCountBarChart.xAxis().tickFormat(function(v) { return ""; });
+
+var datatable = dc.dataTable("#dc-data-table");
+
+datatable
+    .dimension(genderDim)
+    .group(function(d) {return "";})
+    .size(100)
+    .columns([
+        function(d) { return d.state;},
+        function(d) {return d.name;},
+        function(d) {return d.party;},
+        function(d) {return d3.round(d.avg_polarity, 3);},
+        function(d) {return d.num_tweets;},
+        function(d) {return d.election_year},
+    ])
+    .order(d3.ascending)
+    .sortBy(function(d){ return d.num_tweets; })
+
+	dc.renderAll();
+
+</script>
 {% endblock %}

@@ -175,4 +175,19 @@ def overall_summary(request):
     avg_polarity = round(Tweet.objects.all().aggregate(Avg('polarity'))["polarity__avg"],4)
     senators = Senator.objects.annotate(avg_polarity = Avg('search__tweet__polarity')).annotate(num_tweets = Count('search__tweet')).order_by('-num_tweets')
 
-    return render(request, 'TwitterData/overall_summary.html', {'tweet_count': tweet_count, 'avg_polarity':avg_polarity, 'senators':senators})
+    senator_data = []
+
+    for senator in senators:
+        temp = {}
+        temp["name"] = senator.name
+        temp["state"] = senator.state
+        temp["gender"] = senator.gender
+        temp["party"] = senator.party
+        temp["election_year"] = senator.election_year
+        temp["avg_polarity"] = senator.avg_polarity
+        temp["num_tweets"] = senator.num_tweets
+        senator_data.append(temp)
+
+    senator_list = [senator.name for senator in senators]
+
+    return render(request, 'TwitterData/overall_summary.html', {'tweet_count': tweet_count, 'avg_polarity':avg_polarity, 'senators':senators, 'senator_data': json.dumps(senator_data), 'senator_list': json.dumps(senator_list)})
