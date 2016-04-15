@@ -33,21 +33,21 @@ div {
 }
 
 #ring_charts svg {
-    width: 700px;
-    padding-left: 8%;
+    width: 360px;
+    padding-left: 10%;
     fill: #696969;
 }
 
 #senators-displayed, #tweets-displayed, #average-tweets-display, #average-polarity-display {
-        font-size: 20px;
-        text-align: center;
-        padding-left: 45%;
+    font-size: 20px;
+    text-align: center;
+    padding-left: 45%;
 }
 
 body h4 {
-    color: #FF3B3F;
+    color: #FF717E;
 }
 
 footer a {
-    color: #FF3B3F;
+    color: #FF717E;
 }
