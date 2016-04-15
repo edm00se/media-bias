@@ -26,20 +26,36 @@
     </div>
     <div class="row">
       <div class="col-md-3">
-        <h3>Senators</h3>
-        <div id="senators-displayed" class="text"></div>
+        <div class="row">
+          <h3>Senators</h3>
+        </div>
+        <div class="row">
+          <div id="senators-displayed" class="text"></div>
+        </div>
       </div>
       <div class="col-md-3">
-        <h3>Total Tweets</h3>
-        <div id="tweets-displayed"></div>
+        <div class="row">
+          <h3>Total Tweets</h3>
+        </div>
+        <div class="row">
+          <div id="tweets-displayed"></div>
+        </div>
       </div>
       <div class="col-md-3">
-        <h3>Avg. Tweets</h3>
-        <div id="average-tweets-display"></div>
+        <div class="row">
+          <h3>Avg. Tweets</h3>
+        </div>
+        <div class="row">
+          <div id="average-tweets-display"></div>
+        </div>
       </div>
       <div class="col-md-3">
-        <h3>Avg. Polarity</h3>
-        <div id="average-polarity-display"></div>
+        <div class="row">
+          <h3>Avg. Polarity</h3>
+        </div>
+        <div class="row">
+          <div id="average-polarity-display"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -164,7 +180,7 @@
       .innerRadius(0);
 
    tweetCountBarChart
-      .width($(window).width() * .6)
+      .width($(window).width() * .75)
       .height(400)
       .colors(['#FF717E', '#D3D3D3', '#5bc0de'])
       .dimension(tweetDim)
