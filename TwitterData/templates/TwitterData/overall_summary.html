@@ -200,11 +200,11 @@
       .group(function(d) {return "";})
       .size(100)
       .columns([
-          function(d) { return d.state;},
-          function(d) {return d.name;},
+          function(d) {return d.state;},
+          function(d) {return "<a href = '/senator/"+d.id+"'>"+d.name +"</a>";},
           function(d) {return d.party;},
           function(d) {return d3.round(d.avg_polarity * 100, 3);},
-          function(d) {return d.num_tweets;},
+          function(d) {return d.num_tweets.toLocaleString();},
           function(d) {return d.election_year},
       ])
       .order(d3.ascending)

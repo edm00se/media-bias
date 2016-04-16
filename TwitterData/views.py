@@ -179,6 +179,7 @@ def overall_summary(request):
 
     for senator in senators:
         temp = {}
+        temp["id"] = senator.id
         temp["name"] = senator.name
         temp["state"] = senator.state
         temp["gender"] = senator.gender
