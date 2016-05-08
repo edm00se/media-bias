@@ -24,6 +24,16 @@ def index(request):
     return render(request, 'TwitterData/index.html', {'senators': senators})
 
 
+def analysis(request):
+    """Home page with links to other views"""
+    return render(request, 'TwitterData/analysis.html')
+
+
+def about(request):
+    """Home page with links to other views"""
+    return render(request, 'TwitterData/about.html')
+
+
 def count_words_used(tweets):
     """
     Args:

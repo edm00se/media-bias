@@ -34,7 +34,7 @@ div {
 
 #ring_charts svg {
     width: 100%;
-    padding-left: 14%;
+    /*padding-left: 14%;*/
     fill: #696969;
 }
 
