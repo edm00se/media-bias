@@ -5,7 +5,7 @@
 <div class="container">
   <div class="row">
   <div class="col-md-3" id="ring_charts">
-    <div class="row" >
+    <div class="row">
       <h2> Gender </h2>
       <div id="chart-ring-gender"></div>
     </div>
@@ -19,7 +19,7 @@
     </div>
   </div>
 
-  <div class="col-md-9">
+  <div class="col-md-9" id="hi">
     <div class="row">
       <h2> Tweet Count </h2>
       <div id="chart-bar-tweetcount"></div>
@@ -33,7 +33,7 @@
           <div id="senators-displayed" class="text"></div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-3" style="text-align:left">
         <div class="row">
           <h3>Total Tweets</h3>
         </div>
@@ -159,29 +159,31 @@
       .valueAccessor(function(d) {return d.polarity_avg;})
 
   genderRingChart
-      .width(130).height(130)
+      // .width(130).height(130)
+      // .margins({top: 20, left: 10, right: 10, bottom: 20})
       .colors(['#FF717E', '#80D0E8'])
       .dimension(genderDim)
       .group(gender_total)
       .innerRadius(0)
 
   partyRingChart
-      .width(130).height(130)
+      // .width(130).height(130)
       .colors(['#80D0E8', '#D3D3D3', '#FF717E'])
       .dimension(partyDim)
       .group(party_total)
       .innerRadius(0);
 
   electionyearRingChart
-      .width(130).height(130)
+      // .width(130).height(130)
       .colors(['#FF717E', '#D3D3D3', '#80D0E8'])
       .dimension(electionyearDim)
       .group(electionyear_total)
       .innerRadius(0);
 
    tweetCountBarChart
-      .width($(window).width() * .66)
-      .height(400)
+      .width(document.getElementById("hi").clientWidth)
+      .height(600)
+      .margins({top: 10, right: 50, bottom: 30, left: 40})
       .colors(['#FF717E', '#D3D3D3', '#5bc0de'])
       .dimension(tweetDim)
       .group(tweet_total)
