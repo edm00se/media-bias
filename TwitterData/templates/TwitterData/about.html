@@ -1,10 +1,11 @@
 {% extends 'TwitterData/base.html' %}
 
 {% block content %}
+<h1 class="center">About the Project</h1>
 <p>
-  This project scrapes Tweets from <a href= "twitter.com">Twitter</a> in order to see how elected officials are discussed on the site. There are methodology pages on each of the links; however, you can go to a specific senator's page, search for a word to see how it is discussed, or customize a graph on the "Overall Summary" page.
+  This project scrapes Tweets from <a href= "twitter.com">Twitter</a> in order to see how elected officials are discussed on the site. You can go to a specific senator's page, search for a word to see how it is discussed, or customize a graph on the "Overall Summary" page.
 </p>
 <p>
-  This site pulls data continuosly from Twitter every thirty seconds using their public API. It searches for each senator's name, title, and Twitter handle. Three senators are excluded: Ted Cruz, Bernie Sanders, and Marco Rubio. They were all running for president at the beginning of the data pulls, so they were statistical outliers. At the time of this writing, there are 610,000 Tweets in the database; however, it is continuously expanding.
-</p> 
+  This site pulls data continuosly from Twitter every thirty seconds using their public API. It searches for each senator's name, title, and Twitter handle. Three senators are excluded: Ted Cruz, Bernie Sanders, and Marco Rubio. They were all running for president at the beginning of the data pulls, so they were statistical outliers. There are 610,000 Tweets in the database.
+</p>
 {% endblock %}

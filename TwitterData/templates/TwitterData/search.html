@@ -1,229 +1,137 @@
 {% extends 'TwitterData/base.html' %}
+{% load humanize %}
 
 {% block content %}
-<h2>{{word}}</h2>
-<ul class="nav nav-tabs">
-  <li class="active"><a data-toggle="tab" href="#home">Data</a></li>
-  <li><a data-toggle="tab" href="#menu1">Methodology</a></li>
-</ul>
-
-<div class="tab-content">
-  <div id="home" class="tab-pane fade in active">
-  <br>
-  <div class="container">
-    <div class="row"><b>Tweet Count: </b>{{ tweet_count }}</div>
-    <div class="row"><b>Avg Polarity: </b>{{ polarity }}</div>
-    <div class="row"><b>Tweets by Verified Users: </b> {{tweets_by_verified_users}}</div>
-    <div class="row"><b>Senators Mentioned by Verified Users: </b> {% for senator in senators_mentioned_by_verified_users %}{{ senator }}, {% endfor %} </div>
-    <div id="chartContainer"></div>
-    <h3>Differences in Discussion</h3>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <table class = "table table-striped">
-            <thead>
-              <tr>
-                <th>Men</th>
-                <th>Women</th>
-                <th>Difference</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{ male_tweets }}</td>
-                <td>{{ female_tweets }}</td>
-                <td class = "difference">{{ stat_difference_gender }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <table class = "table table-striped">
-            <thead>
-              <tr>
-                <th>Republicans</th>
-                <th>Democrats</th>
-                <th>Difference</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{ republican_tweets }}</td>
-                <td>{{ democratic_tweets }}</td>
-                <td class = "difference">{{ stat_difference_party }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <table class = "table table-striped">
-            <thead>
-              <tr>
-                <th>Republican Women</th>
-                <th>Democratic Women</th>
-                <th>Difference</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{ female_republican_tweets }}</td>
-                <td>{{ female_democrat_tweets }}</td>
-                <td class = "difference">{{ stat_difference_women }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="col-md-6">
-          <table class = "table table-striped">
-            <thead>
-              <tr>
-                <th>Republican Men</th>
-                <th>Democratic Men</th>
-                <th>Difference</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{ male_republican_tweets }}</td>
-                <td>{{ male_democrat_tweets }}</td>
-                <td class = "difference">{{ stat_difference_men }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <table class = "table table-striped">
-            <thead>
-              <tr>
-                <th>Republican Men</th>
-                <th>Republican Women</th>
-                <th>Difference</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{ male_republican_tweets }}</td>
-                <td>{{ female_republican_tweets }}</td>
-                <td class = "difference">{{ stat_difference_republicans }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <table class = "table table-striped">
-            <thead>
-              <tr>
-                <th>Democratic Men</th>
-                <th>Democratic Women</th>
-                <th>Difference</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{ male_democrat_tweets }}</td>
-                <td>{{ female_democrat_tweets }}</td>
-                <td class = "difference">{{ stat_difference_democrats }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <table class = "table table-striped">
-          <thead>
-            <tr>
-              <th>Democratic Men</th>
-              <th>Democratic Women</th>
-              <th>Republican Men</th>
-              <th>Republican Women</th>
-              <th>Difference</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{{ male_democrat_tweets }}</td>
-              <td>{{ female_democrat_tweets }}</td>
-              <td>{{ male_republican_tweets }}</td>
-              <td>{{ female_republican_tweets }}</td>
-              <td class = "difference">{{ stat_difference_party_gender }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <br>
-        </div>
+<h1 class="center">Tweets About: {{word}}</h1>
+<div class="row"><b>Tweet Count: </b>{{ tweet_count }}</div>
+<div class="row"><b>Average Positivity: </b>{{ polarity }}</div>
+<div class="row"><b>Tweets by Verified Users: </b> {{ tweets_by_verified_users }}</div>
+<div class="row"><b>Senators Maletioned by Verified Users: </b> {% for senator in senators_Maletioned_by_verified_users %}{{ senator }}{% if not forloop.last %}, {% endif %}{% endfor %} </div>
+<div id="chartContainer"></div>
+<h3 class="center">Differences in Discussion</h3>
+<h5>The statistical difference field represents the p-value from an adjusted chi-square test. If the p-value is less than 0.05, there is evidence that the differences in discussion are statistically significant.</h5>
+  <div class="row">
+    <div class="col s12 m4">
+      <div class="card-panel blue lighten-1">
+        <span class="white-text">
+          <h3 class="center">Tweets by Gender</h3>
+          <h6><b>Tweets about Male Senators: </b>{{ male_tweets | intcomma }}</h6>
+          <h6><b>Tweets about Female Senators: </b>{{ female_tweets | intcomma }}</h6>
+          <h6 class="difference"><b>Statistical Difference: </b>{{ stat_difference_gender }}</h6>
+        </span>
+      </div>
+    </div>
+    <div class="col s12 m4">
+      <div class="card-panel red lighten-1">
+        <span class="white-text">
+          <h3 class="center">Tweets by Party</h3>
+          <h6><b>Tweets about Republican Senators: </b>{{ republican_tweets | intcomma }}</h6>
+          <h6><b>Tweets about Democratic Senators: </b>{{ democratic_tweets | intcomma }}</h6>
+          <h6 class="difference"><b>Statistical Difference: </b>{{ stat_difference_party }}</h6>
+        </span>
+      </div>
+    </div>
+    <div class="col s12 m4">
+      <div class="card-panel grey lighten-1">
+        <span class="white-text">
+          <h3 class="center">Tweets about Women by Party</h3>
+          <h6><b>Tweets about Republican Female Senators: </b>{{ female_republican_tweets | intcomma }}</h6>
+          <h6><b>Tweets about Democratic Female Senators: </b>{{ female_democrat_tweets | intcomma }}</h6>
+          <h6 class="difference"><b>Statistical Difference: </b>{{ stat_difference_women}}</h6>
+        </span>
       </div>
     </div>
   </div>
-  <div id="menu1" class="tab-pane fade">
-    <h1>Summary Statistics</h1>
-    <p>
-      The search function finds the occurrences of a word in all of the Tweets gathered by the application. It displays summary information about the usage of the word both overall and by demographic group of senators.
-    </p>
-    <h3>Tweet Count</h3>
-    <p>
-      The Tweet Count is the number of tweets about all Senators combined that contain that term.
-    </p>
-    <h3>Average Polarity</h3>
-    <p>
-      The Average Polarity is a Bayesian classification of sentiment created by <a href = "http://textblob.readthedocs.org/en/dev/api_reference.html#textblob.blob.TextBlob.sentiment ">TextBlob</a>. This figure measures how positive or negative on average the Tweets containing the specified word are on a scale from -1 to 1. Those with negative polarity scores are more negative.
-    </p>
-    <h3>Tweets by Verified Users</h3>
-    <p>
-      This figure is the same as the original "Tweet Count" measure; however, it only includes Tweets from verified users. The breakdown is important because these users are other politicians, celebrities with large audiences, or members of the media.
-    </p>
-    <h3>Senators Mentioned by Verified Users</h3>
-    <p>
-      This lists the Senators that the verified users are Tweeting about with the search term.
-    </p>
-    <h1>Graph</h1>
-    <p>
-      The Mentions per Senator graph shows how many times the twenty Senators mentioned most with the search term are discussed.
-    </p>
-    <h1>Differences in Discussion</h1>
-    <p>
-      These figures show how many times Senators in the listed groups are discussed with the search term and if there is a statistically significant different number of Tweets for the group of Senators. The statistical difference is computed using a Pearson's Chi-Squared test that is adjusted for the group size -- the formula takes into account that there are just 20 women in the Senate to compare to the 77 male Senators studied in this project. If the difference has a p-value below 0.05 there is a statistically significant difference between the way the groups are discussed. The p-values change color in relation to statistical significance -- red ones are insignificant whereas blue ones are significant.
-    </p>
+  <div class="row">
+    <div class="col s12 m4">
+      <div class="card-panel grey darken-1">
+        <span class="white-text">
+          <h3 class="center">Tweets about Men by Party</h3>
+          <h6><b>Tweets about Republican Male Senators: </b>{{ male_republican_tweets | intcomma }}</h6>
+          <h6><b>Tweets about Democratic Male Senators: </b>{{ male_democrat_tweets | intcomma }}</h6>
+          <h6 class="difference"><b>Statistical Difference: </b>{{ stat_difference_men }}</h6>
+        </span>
+      </div>
+    </div>
+    <div class="col s12 m4">
+      <div class="card-panel red lighten-3">
+        <span class="white-text">
+          <h3 class="center">Tweets about Republicans by Gender</h3>
+          <h6><b>Tweets about Republican Male Senators: </b>{{ male_republican_tweets | intcomma }}</h6>
+          <h6><b>Tweets about Republican Female Senators: </b>{{ female_republican_tweets | intcomma }}</h6>
+          <h6 class="difference"><b>Statistical Difference: </b>{{ stat_difference_republicans }}</h6>
+        </span>
+      </div>
+    </div>
+    <div class="col s12 m4">
+      <div class="card-panel blue lighten-3">
+        <span class="white-text">
+          <h3 class="center">Tweets about Democrats by Gender</h3>
+          <h6><b>Tweets about Democratic Male Senators: </b>{{ male_democrat_tweets | intcomma }}</h6>
+          <h6><b>Tweets about Democratic Female Senators: </b>{{ female_democrat_tweets | intcomma }}</h6>
+          <h6 class="difference"><b>Statistical Difference: </b>{{ stat_difference_democrats }}</h6>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="card-panel red lighten-1">
+      <span class="white-text">
+        <h3 class="center">Total Tweets by Group</h3>
+        <div class="col m6 center">
+          <h6><b>Tweets about Democratic Male Senators: </b>{{ male_democrat_tweets | intcomma }}</h6>
+          <h6><b>Tweets about Democratic Female Senators: </b>{{ female_democrat_tweets | intcomma }}</h6>
+        </div>
+        <div class="col m6 center">
+          <h6><b>Tweets about Republican Male Senators: </b>{{ male_republican_tweets | intcomma }}</h6>
+          <h6><b>Tweets about Republican Female Senators: </b>{{ female_republican_tweets | intcomma }}</h6>
+        </div>
+        <h6 class="difference center"><b>Statistical Difference: </b>{{ stat_difference_party_gender }}</h6>
+      </span>
+    </div>
   </div>
 </div>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script>
-$(document).ready(function(){
+{% endblock %}
 
-  // Change the colors of the Chi-Squared tests
-  $('.difference').each(function(){
-      if ($(this).text() > .05){
-        $(this).css('color', '#FF3B3F');
+{% block javascript %}
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script>
+  $(document).ready(function(){
+      // Render the chart
+      // Similar to example found here: https://google-developers.appspot.com/chart/interactive/docs/gallery/columnchart
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var count_by_senator = {{ count_by_senator | safe }}
+        var data = [["Senator", "Count"]];
+
+        for (var senator in count_by_senator){
+          data.push([senator, count_by_senator[senator]])
+        };
+
+        var data = google.visualization.arrayToDataTable(data);
+        var view = new google.visualization.DataView(data);
+
+        var options = {
+          title: "Mentions Per Senator",
+          width: '100%',
+          height: 800,
+          bar: { groupWidth: "95%" },
+          legend: { position: "none" },
+          fontName: 'roboto',
+          titleTextStyle:{
+            color: "black",
+            fontSize: 22,
+            fontName: "roboto"
+          },
+          colors:['#FF3B3F'],
+          chartArea: {'width': '80%', 'height': '80%'},
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById("chartContainer"));
+        chart.draw(view, options);
       }
-      else{
-        $(this).css('color', '#428bca');
-      }
-    });
-
-    // Render the chart
-    // Similar to example found here: https://google-developers.appspot.com/chart/interactive/docs/gallery/columnchart
-    google.charts.load("current", {packages:["corechart"]});
-    google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-      var count_by_senator = {{ count_by_senator | safe }}
-      var data = [["Senator", "Count"]];
-
-      for (var senator in count_by_senator){
-        data.push([senator, count_by_senator[senator]])
-      };
-
-      var data = google.visualization.arrayToDataTable(data);
-      var view = new google.visualization.DataView(data);
-
-      var options = {
-        title: "Mentions Per Senator",
-        width: '100%',
-        height: 800,
-        bar: { groupWidth: "95%" },
-        legend: { position: "none" },
-        fontName: 'Josefin Sans',
-        titleTextStyle:{
-          color: "black",
-          fontSize: 22,
-        },
-        colors:['#FF3B3F'],
-        chartArea: {'width': '80%', 'height': '80%'},
-      };
-
-      var chart = new google.visualization.BarChart(document.getElementById("chartContainer"));
-      chart.draw(view, options);
-    }
-  })
-
-</script>
+    })
+  </script>
 {% endblock %}

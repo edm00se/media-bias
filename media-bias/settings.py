@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'TwitterData'
+    'django.contrib.humanize',
+    'TwitterData',
 ]
 
 MIDDLEWARE_CLASSES = [

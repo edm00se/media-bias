@@ -1,36 +1,126 @@
 {% extends 'TwitterData/base.html' %}
 
 {% block content %}
-  <div class="container">
-    <a href= "/summary/"><h3>Overall Summary Data</h3></a>
-    <label for="select_senator"><h4> Get Summary Data for a Senator: </h4></label>
-    <div class="input-group">
-      <select id="select_senator" class="form-control">
-        {% for senator in senators %}
-            <option value="{{ senator.pk }}"> {{ senator.name }} </option>
-        {% endfor %}
-      </select>
-      <span class="input-group-btn">
-        <a class="btn btn-default" role="button" id = "senator_select_button" href = "/senator/2/">Go</a>
-      </span>
-    </div>
-    <label for="search"><h4> Get Summary Data for a Word: </h4></label>
-    <div class="input-group">
-      <input id="search" class="form-control"></input>
-      <span class="input-group-btn">
-        <a class="btn btn-default" role="button" id = "senator_search_button">Go</a>
-      </span>
-    </div>
+<div class="row">
+  <div class="col l4 m4">
+	<h2 id="logo"><div class="row">Political Discussion</div> <i class="ion-chatboxes" style="font-size: 200%"></i></h2>
   </div>
-  <script>
-  $('#select_senator').change(function(){
-      $("#senator_select_button").attr("href", "senator/" + this.value)
-    }
-  )
-  $('#senator_search_button').click(function(){
-      window.location = "/search/" + $('#search').val()
-    }
-  )
-  </script>
+  <div class="col l4 m6">
+	<div class="card-panel blue lighten-1" style="height:100%">
+	  <span class="white-text">
+		<h2 class="text-center"><b>97</b></h2>
+		<p>The number of US Senators, minus former presidential candidates Bernie Sanders, Marco Rubio, and Ted Cruz</p>
+	  </span>
+		<a href="/summary/" class="waves-effect waves-light red lighten-1 btn btn-block">View The Discussion</a>
+	</div>
+  </div>
+  <div class="col l4 m6">
+	<div class="card-panel red lighten-1" style="height:100%">
+	  <span class="white-text">
+		<h2 class="text-center"><b>610,000</b></h2>
+		<p>The number of Tweets aggregated in this application</p>
+		<div class="input-field white-text" style="width:100%">
+		  <i class="ion-android-search prefix"></i>
+		  <input id="icon_prefix" type="text">
+		  <label for="icon_prefix" style="color:white">Search Hashtags and Topics</label>
+		</div>
+	  </span>
+	</div>
+  </div>
+</div>
+<div id="box" class="row">
+	<div id="textbox">
+		<h5>
+			See how people are discussing your Senator...
+		</h5>
+	</div>
+</div>
+{% endblock %}
 
+
+{% block javascript %}
+<script>
+$("#icon_prefix").keyup(function(event){
+	if(event.keyCode == 13){
+		window.location = "/search/" + $(this).val();
+		show_slow_warning()
+	}
+});
+
+function show_slow_warning() {
+	$("main").fadeOut(1000);
+	$("footer").hide();
+	$("#loading").show();
+}
+</script>
+
+<script>
+	var senators = {{ senator_json | safe }}
+
+	d3.json("/static/images/convertedstates.json", function(error, states) {
+		// From Making D3 Charts responsive
+		var margin = {top: 10, left: 10, bottom: 10, right: 10},
+			width = parseInt(d3.select('#box').style('width')),
+			width = width - margin.left - margin.right,
+			mapRatio = .5,
+			height = width * mapRatio;
+
+		// Append SVG canvas to the DOM.
+		var svg = d3.select("#box")
+					.append("svg")
+					.attr("width", width)
+					.attr("height", height);
+
+		var states = topojson.feature(states, states.objects.states);
+		states.features.forEach(function(state){
+			state.properties.senators = senators[state.id];
+		});
+
+		var projection = d3.geo.albersUsa()
+						   .scale(width)
+						   .translate([width / 2, height / 2]);
+
+		var path = d3.geo.path()
+		.projection(projection);
+
+		// Append the newly-created path generator to the map.
+		svg.append("path")
+			.attr("class", "borders")
+			.datum(states)
+			.attr("d", path)
+			.style("fill", "black");
+
+		svg.selectAll('.states')
+			.data(states.features)
+			.enter()
+			.append('path')
+			.attr('class', function(d) {
+				return 'states' + d.id;
+			})
+			.attr("stroke", "black")
+			.on("mouseover", function(d){
+				d3.select(this)
+					.style("fill", "#eeeeee")
+					.style("cursor", "pointer");
+			})
+			.on("mouseout", function(d){
+				d3.select(this)
+					.style("fill", "#bdbdbd ")
+			})
+			.on("click", function(d){
+				var text = "<h5>" + d.id + ": ";
+				d.properties.senators.forEach(function(senator){
+					text += "<a href='senator/" + senator.id + "'>" + senator.senator + "</a>, ";
+				});
+				text = text.slice(0, -2); // Remove the trailing comma
+				text += "</h5>"
+				d3.select("#textbox")
+					.html("")
+					.append("text")
+					.html(text);
+			})
+			.style("fill", "#bdbdbd ")
+			.attr('d', path)
+			});
+	</script>
 {% endblock %}

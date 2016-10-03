@@ -3,49 +3,63 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Political Discussion</title>
 
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="{% static 'css/TwitterData.css' %}">
-    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="https://d3js.org/d3.v3.min.js"></script>
-    <script src="//dimplejs.org/dist/dimple.v2.1.6.min.js"></script>
-    <script src = 'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js' type = "text/javascript"></script>
-    <script type="text/javascript" src="https://rawgithub.com/NickQiZhu/dc.js/master/web/js/crossfilter.js"></script>
-    <script src= "http://cdnjs.cloudflare.com/ajax/libs/dc/1.7.5/dc.min.js" type="text/javascript"></script>
-    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/dc/1.7.5/dc.css"
-     media="screen" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+		<link rel="stylesheet" href="{% static 'css/TwitterData.css' %}">
+		<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/dc/1.7.5/dc.css" media="screen" />
+		<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
   </head>
   <body>
-    <header>
-      <div class="container">
-        <div class="row">
-          <h1>Political Discussion on Twitter</h1>
-        </div>
-        <div class="row">
-          <div class="col-md-4"><a href = "/about"> About the Project </a></div>
-          <div class="col-md-4"><a href = "/analysis"> Analysis </a></div>
-          <div class="col-md-4"><a href = "/"> Home </a></div>
-        </div>
-      </div>
-    </header>
-  	<div class="container">
-      <br>
-  		{% block content %}
-    	{% endblock %}
-    </div>
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-4"><a href = "https://github.com/aspittel/MediaBias"> Source Code </a></div>
-          <div class="col-md-4">A Hamilton College Government Department Senior Project</div>
-          <div class="col-md-4">by Ali Spittel</div>
-        </div>
-      </div>
-    </footer>
+		<nav>
+			<div class="nav-wrapper">
+				<a href="/" class="brand-logo"><i class="ion-chatboxes"></i></a>
+				<ul id="nav-mobile" class="right hide-on-med-and-down">
+					<li><a href = "/about"> About the Project </a></li>
+					<li><a href = "/analysis"> Analysis </a></li>
+					<li><a href = "/"> Home </a></li>
+				</ul>
+			</div>
+		</nav>
+		<main role="main" class="page-content" aria-label="Content">
+			<div class="container">
+		  	<br>
+				{% block content %}
+				{% endblock %}
+			</div>
+		</main>
+		<footer class="blue lighten-1 page-footer">
+		  <div class="container">
+				<div class="row">
+				  <div class="col m4"><a href="https://github.com/aspittel/MediaBias" class="red-text text-lighten-1"> Source Code </a></div>
+				  <div class="col m4">A Hamilton College Government Department Senior Project</div>
+				  <div class="col m4">by <a href="aspittel.github.io" class="red-text text-lighten-1">Ali Spittel</a></div>
+				</div>
+		  </div>
+		</footer>
+	  <div id="loading" style="display:none">
+		  <h1>Loading...</h1>
+		  <div class="preloader-wrapper big active" style="left:55%">
+			  <div class="spinner-layer spinner-blue-only">
+				  <div class="circle-clipper left">
+					  <div class="circle"></div>
+				  </div><div class="gap-patch">
+				  <div class="circle"></div>
+				  </div><div class="circle-clipper right">
+				  <div class="circle"></div>
+				  </div>
+			  </div>
+		  </div>
+	  </div>
+		<script src="https://d3js.org/d3.v3.min.js"></script>
+	  <script src="//d3js.org/topojson.v1.min.js"></script>
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+    {% block javascript %}
+    {% endblock %}
   </body>
 </html>

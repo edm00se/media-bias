@@ -1,53 +1,93 @@
-h1, h2, h3, h4 {
-    text-align: center;
-}
-
-footer {
-    font-family: 'Josefin Sans', sans-serif;
-    text-align: center;
-}
-
-header {
-    background-color: #CAEBF2;
-    text-align: center;
-    font-family: 'Josefin Sans', sans-serif;
-}
-
-header a {
-    color = #696969;
-    font-size: 20px;
+#logo {
+	font-family: 'Roboto', sans-serif;
+	color: black;
 }
 
 body {
-    /*background-color: #EFEFEF;*/
-    font-family: 'Josefin Sans', sans-serif;
+  background: #f5f5f5;
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
 }
 
-#chartContainer {
-    margin:-100;
-    padding:0;
+main {
+	flex: 1 0 auto;
 }
 
-div {
-    text-align: center;
+h1, h2, h3, h4, h5 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 100;
 }
 
-#ring_charts svg {
-    width: 100%;
-    /*padding-left: 14%;*/
-    fill: #696969;
+h3 {
+  color: black;
 }
 
-#senators-displayed, #tweets-displayed, #average-tweets-display, #average-polarity-display {
-    font-size: 20px;
-    text-align: center;
-    padding-left: 45%;
+nav {
+  background-color: white;
+  padding: 0px 12px;
 }
 
-body h4 {
-    color: #FF717E;
+.ion-chatboxes{
+  color: #ef5350;
 }
 
-footer a {
-    color: #FF717E;
+nav ul a {
+    color: #696969;
+}
+
+.senator-link {
+  color: #ef5350;
+}
+
+.borders {
+	fill: none;
+	stroke: black;
+	stroke-width: 1;
+	stroke-opacity: 1;
+}
+
+#textbox text p {
+	font-size: .8em;
+	margin: 0;
+}
+
+.btn-block {
+	width: 100%;
+}
+
+input:focus {
+	color: white;
+	border-bottom: white;
+}
+
+#loading {
+	width:100px;
+	height: 100px;
+	position: fixed;
+	top: 40%;
+	left: 40%;
+}
+
+input:not([type]):focus:not([readonly]), input[type=email]:focus:not([readonly]),  textarea.materialize-textarea:focus:not([readonly]) {
+	border-bottom: 1px solid #ef5350
+	box-shadow: 0 1px 0 0 #ef5350
+}
+
+input[type=text]:focus:not([readonly]) {
+	border-bottom: 1px solid pink;
+	box-shadow: 0 1px 0 0 pink;
+}
+
+.input-field .prefix.active {
+	color: pink;
+}
+
+.dc-chart {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.difference {
+	color: black;
 }

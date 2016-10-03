@@ -9,3 +9,4 @@ python-twitter
 whitenoise==3.0
 numpy==1.9.2
 scipy==0.15.1
+humanize==0.5.1
