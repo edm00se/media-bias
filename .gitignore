@@ -1,4 +1,3 @@
 *.pyc
-settings.py
 media_bias_venv/
 .DS_Store
