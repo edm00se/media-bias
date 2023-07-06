@@ -8,5 +8,5 @@ textblob==0.11.1
 python-twitter
 whitenoise==3.0
 numpy==1.9.2
-scipy==0.15.1
+scipy==1.10.0
 humanize==0.5.1
